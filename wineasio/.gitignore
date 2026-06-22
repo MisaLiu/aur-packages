@@ -1,6 +1,7 @@
 # exclude everything except directory .gitignore, PKGBUILD, .SRCINFO and wineasio.install
 /*
 !/.gitignore
+!/README.md
 !/PKGBUILD
 !/.SRCINFO
 !/wineasio.install
