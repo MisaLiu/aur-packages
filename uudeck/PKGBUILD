@@ -1,0 +1,31 @@
+# Maintainer: liyp <my@liyp.cc>
+# Contributor: Misa Liu <misaliu@misaliu.top>
+
+pkgname=uudeck
+pkgver=12.2.10
+pkgrel=1
+pkgdesc="Simplified UU Accelerator for Steam Deck on Arch Linux"
+arch=('x86_64')
+license=('custom')
+url='https://uu.163.com/'
+depends=('curl' 'systemd')
+source=("uuplugin_monitor.sh::https://uurouter.gdl.netease.com/uuplugin-script/steam-deck-plugin/monitor/v3/uuplugin_monitor.sh"
+        "uuplugin.service"
+        "uuplugin_monitor.config")
+sha256sums=('554977e959d6886a44cf4badcacbfba4acd958650797e28d06e8720c0001d9c2'
+            '56c9c03483727c24275a010bf2aeab6de98ffc1cb3a4bc3c31e0695432dc00c3'
+            'f539a40aa060b1e8d584f9d0161f12faa3df34698036f8bb5bbc124c52c47556')
+
+prepare() {
+    sed -i \
+        -e 's#^MONITOR_CONFIG=.*#MONITOR_CONFIG="/etc/uu/uuplugin_monitor.config"#' \
+        -e 's#^RUNNING_DIR="/tmp/uu"#RUNNING_DIR="/var/lib/uu/run"#' \
+        -e 's#PLUGIN_DIR="\${BASEDIR}"#PLUGIN_DIR="/var/lib/uu"#' \
+        "$srcdir/uuplugin_monitor.sh"
+}
+
+package() {
+    install -Dm755 "$srcdir/uuplugin_monitor.sh"     "$pkgdir/usr/lib/uudeck/uuplugin_monitor.sh"
+    install -Dm644 "$srcdir/uuplugin.service"        "$pkgdir/usr/lib/systemd/system/uuplugin.service"
+    install -Dm644 "$srcdir/uuplugin_monitor.config" "$pkgdir/etc/uu/uuplugin_monitor.config"
+}

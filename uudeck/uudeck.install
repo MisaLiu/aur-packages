@@ -1,0 +1,7 @@
+post_install() {
+  echo ":: 请启用服务 uuplugin.service 以使用加速器"
+}
+
+pre_remove() {
+  systemctl disable --now uuplugin.service 2>/dev/null || true
+}
