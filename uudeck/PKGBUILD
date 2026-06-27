@@ -2,7 +2,7 @@
 # Contributor: Misa Liu <misaliu@misaliu.top>
 
 pkgname=uudeck
-pkgver=12.2.10
+pkgver=14.2.2
 pkgrel=1
 pkgdesc="Simplified UU Accelerator for Steam Deck on Arch Linux"
 arch=('x86_64')
