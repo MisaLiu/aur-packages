@@ -13,7 +13,7 @@ source=("uuplugin_monitor.sh::https://uurouter.gdl.netease.com/uuplugin-script/s
         "uuplugin.service"
         "uuplugin_monitor.config")
 sha256sums=('554977e959d6886a44cf4badcacbfba4acd958650797e28d06e8720c0001d9c2'
-            '56c9c03483727c24275a010bf2aeab6de98ffc1cb3a4bc3c31e0695432dc00c3'
+            '41e50d3affbb719b7d5a35c94f91f8b03fc4ac9c3141caffdae56377dd36afce'
             'f539a40aa060b1e8d584f9d0161f12faa3df34698036f8bb5bbc124c52c47556')
 
 prepare() {
