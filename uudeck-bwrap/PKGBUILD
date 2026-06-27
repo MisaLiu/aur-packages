@@ -10,8 +10,8 @@ license=('custom')
 url='https://uu.163.com/'
 depends=('systemd' 'bash' 'bubblewrap' 'curl' 'iproute2')
 makedepends=('curl' 'tar')
-provides=('uudeck')
 conflicts=('uudeck')
+install=uudeck.install
 source=("uu.tar.gz::https://uurouter.gdl.netease.com/uuplugin/steam-deck-plugin-x86_64/v${pkgver}/uu.tar.gz"
         "launch.sh"
         "uuplugin.service")
@@ -19,15 +19,13 @@ sha256sums=('SKIP'
             '3cd77d7249cdc90a3ab6622ce18ef2bf2f24edb83ce50132f6717b96218b2529'
             'b77dff2fa1f2e0b9237cda9d56158a644414a1ce22c788d9a43887f77ab39f20')
 
-_pkgSourceInfoUrl='https://router.uu.163.com/api/plugin?type=steam-deck-plugin-x86_64'
-
 pkgver() {
     local info url
 
     info=$(
         curl -fsSL \
             -H 'Accept: text/plain' \
-            $_pkgSourceInfoUrl
+            "https://router.uu.163.com/api/plugin?type=steam-deck-plugin-x86_64"
     )
 
     IFS=, read -r url _ <<<"$info"
@@ -35,11 +33,6 @@ pkgver() {
     printf '%s\n' \
         "$(printf '%s' "$url" |
             sed -n 's#.*/v\([^/]*\)/.*#\1#p')"
-}
-
-prepare() {
-    echo "  :: Extracting plugin files..."
-    tar -xzf "$srcdir/uu.tar.gz"
 }
 
 package() {

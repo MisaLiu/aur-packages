@@ -1,5 +1,6 @@
 post_install() {
-  echo ":: 请启用服务 uuplugin.service 以使用加速器"
+  echo "  :: 请运行 sudo systemctl start uuplugin.service 以启用加速器"
+  echo "  :: 如果不希望每次开机都运行一次，请运行 sudo systemctl enable --now uuplugin.service 以使其开机自启"
 }
 
 pre_remove() {
