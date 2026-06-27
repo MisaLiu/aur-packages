@@ -10,13 +10,12 @@ ProtectKernelTunables=yes
 ProtectKernelModules=yes
 PrivateTmp=yes
 NoNewPrivileges=yes
-RestrictNamespaces=yes
 RestrictRealtime=yes
 ProtectSystem=strict
 ProtectHome=yes
 LockPersonality=yes
-ReadWritePaths=/var/lib/uu
-ExecStart=/bin/sh /usr/lib/uudeck/uuplugin_monitor.sh
+WorkingDirectory=/var/lib/uu
+ExecStart=/usr/lib/uudeck/launch.sh
 Restart=on-failure
 RestartSec=5
 

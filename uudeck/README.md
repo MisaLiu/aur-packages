@@ -4,13 +4,13 @@
 
 本包修改自 [这个 AUR 包](https://aur.archlinux.org/packages/uudeck)，主要修改了如下部分：
 
-* 从官方直接下载对应脚本而无须维护者手动上传；
-* 将插件的依赖脚本存放目录从 `/home/${whoami}/uu` 迁移到 `/var/lib/uu`；
-* 将插件的配置文件从 `/home/${whoami}/uu/uuplugin_monitor.config` 迁移到 `/etc/uu/uuplugin_monitor.config`；
-* 将插件的运行目录从 `/tmp/uu` 迁移到 `/var/lib/uu/run`。
-* 尽量利用 systemd 自带的沙盒功能对权限进行了收紧
+* 从官方直接获取最新版本号、下载对应二进制文件而无须维护者手动上传；
+* 将插件的二进制文件存放目录从 `/home/${whoami}/uu` 迁移到 `/usr/lib/uudeck`；
+* 将插件的配置文件从 `/home/${whoami}/uu/uu.conf` 迁移到 `/var/lib/uu/uu.conf`；
+* 将插件的运行目录从 `/tmp/uu` 迁移到 `/var/lib/uu`。
+* 利用 Systemd 自带的沙盒功能与 Bubblewrap 对权限进行了收紧
 
-本包修改了官方插件，使其不会到处乱拉依赖文件（附属脚本、配置文件等），同时避免了重启系统后需要在 App 内删除设备重新绑定的麻烦问题。
+本包修改了官方插件，使其不会到处乱拉依赖文件（附属脚本、配置文件等），同时努力避免了重启系统后需要在 App 内删除设备重新绑定的麻烦问题。
 
 ## 使用
 

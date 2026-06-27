@@ -1,31 +1,51 @@
 # Maintainer: liyp <my@liyp.cc>
 # Contributor: Misa Liu <misaliu@misaliu.top>
 
-pkgname=uudeck
-pkgver=14.2.2
+pkgname=uudeck-bwrap
+pkgver=14.2.2_20260626
 pkgrel=1
-pkgdesc="Simplified UU Accelerator for Steam Deck on Arch Linux"
+pkgdesc="Simplified UU Accelerator for Steam Deck on Arch Linux, with some extra patches"
 arch=('x86_64')
 license=('custom')
 url='https://uu.163.com/'
-depends=('curl' 'systemd')
-source=("uuplugin_monitor.sh::https://uurouter.gdl.netease.com/uuplugin-script/steam-deck-plugin/monitor/v3/uuplugin_monitor.sh"
-        "uuplugin.service"
-        "uuplugin_monitor.config")
-sha256sums=('554977e959d6886a44cf4badcacbfba4acd958650797e28d06e8720c0001d9c2'
-            '41e50d3affbb719b7d5a35c94f91f8b03fc4ac9c3141caffdae56377dd36afce'
-            'f539a40aa060b1e8d584f9d0161f12faa3df34698036f8bb5bbc124c52c47556')
+depends=('systemd' 'bash' 'bubblewrap' 'curl' 'iproute2')
+makedepends=('curl' 'tar')
+provides=('uudeck')
+conflicts=('uudeck')
+source=("uu.tar.gz::https://uurouter.gdl.netease.com/uuplugin/steam-deck-plugin-x86_64/v${pkgver}/uu.tar.gz"
+        "launch.sh"
+        "uuplugin.service")
+sha256sums=('SKIP'
+            '3cd77d7249cdc90a3ab6622ce18ef2bf2f24edb83ce50132f6717b96218b2529'
+            'b77dff2fa1f2e0b9237cda9d56158a644414a1ce22c788d9a43887f77ab39f20')
+
+_pkgSourceInfoUrl='https://router.uu.163.com/api/plugin?type=steam-deck-plugin-x86_64'
+
+pkgver() {
+    local info url
+
+    info=$(
+        curl -fsSL \
+            -H 'Accept: text/plain' \
+            $_pkgSourceInfoUrl
+    )
+
+    IFS=, read -r url _ <<<"$info"
+
+    printf '%s\n' \
+        "$(printf '%s' "$url" |
+            sed -n 's#.*/v\([^/]*\)/.*#\1#p')"
+}
 
 prepare() {
-    sed -i \
-        -e 's#^MONITOR_CONFIG=.*#MONITOR_CONFIG="/etc/uu/uuplugin_monitor.config"#' \
-        -e 's#^RUNNING_DIR="/tmp/uu"#RUNNING_DIR="/var/lib/uu/run"#' \
-        -e 's#PLUGIN_DIR="\${BASEDIR}"#PLUGIN_DIR="/var/lib/uu"#' \
-        "$srcdir/uuplugin_monitor.sh"
+    echo "  :: Extracting plugin files..."
+    tar -xzf "$srcdir/uu.tar.gz"
 }
 
 package() {
-    install -Dm755 "$srcdir/uuplugin_monitor.sh"     "$pkgdir/usr/lib/uudeck/uuplugin_monitor.sh"
-    install -Dm644 "$srcdir/uuplugin.service"        "$pkgdir/usr/lib/systemd/system/uuplugin.service"
-    install -Dm644 "$srcdir/uuplugin_monitor.config" "$pkgdir/etc/uu/uuplugin_monitor.config"
+    install -Dm755 "$srcdir/launch.sh"         "$pkgdir/usr/lib/uudeck/launch.sh"
+    install -Dm755 "$srcdir/uuplugin"          "$pkgdir/usr/lib/uudeck/uuplugin"
+    install -Dm755 "$srcdir/xuplugin-guardian" "$pkgdir/usr/lib/uudeck/xuplugin-guardian"
+    install -Dm644 "$srcdir/uu.conf"           "$pkgdir/var/lib/uu/uu.conf"
+    install -Dm644 "$srcdir/uuplugin.service"  "$pkgdir/usr/lib/systemd/system/uuplugin.service"
 }
