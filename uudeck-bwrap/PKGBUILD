@@ -1,5 +1,5 @@
-# Maintainer: liyp <my@liyp.cc>
-# Contributor: Misa Liu <misaliu@misaliu.top>
+# Maintainer:  Misa Liu <misaliu@misaliu.top>
+# Contributor: liyp <my@liyp.cc>
 
 pkgname=uudeck-bwrap
 pkgver=14.2.2_20260626
