@@ -3,7 +3,7 @@
 
 pkgname=uudeck-bwrap
 pkgver=14.4.20
-pkgrel=1
+pkgrel=2
 pkgdesc="Simplified UU Accelerator for Steam Deck on Arch Linux, with some extra patches"
 arch=('x86_64')
 license=('custom')
