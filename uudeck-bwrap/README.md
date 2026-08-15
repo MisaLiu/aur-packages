@@ -1,5 +1,7 @@
 # UU 加速器 Steam Deck 插件版
 
+> 本包被认为仅在原包的基础上添加了 Bubblewrap 沙盒层，被 AUR 管理员从 AUR 中删除。暂时不知道有什么办法可以恢复。
+
 [UU 加速器](https://uu.163.com/) 官方推出的 [Steam Deck 插件版](https://baike.sowellwell.com/router/item/64b8d44c04cb117f2316b062.html)。
 
 本包修改自 [这个 AUR 包](https://aur.archlinux.org/packages/uudeck)，主要修改了如下部分：
