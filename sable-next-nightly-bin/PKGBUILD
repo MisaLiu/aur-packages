@@ -1,0 +1,90 @@
+# Maintainer: Misa Liu <misaliu@misaliu.top>
+# Contributor: Sable Maintainers <https://github.com/SableClient/Sable>
+
+pkgname=sable-next-nightly-bin
+pkgver=0.0.2_nightly.260930135041.382030605cda
+pkgrel=1
+pkgdesc="A from-scratch rewrite of Sable, with Svelte and Rust."
+arch=('x86_64')
+url="https://git.sable.moe/SableClient/sable-next"
+license=('AGPL-3.0-or-later')
+depends=(
+  'gtk3'
+  'nss'
+  'alsa-lib'
+  'libcups'
+  'libdrm'
+  'mesa'
+  'libxkbcommon'
+  'libxss'
+  'libxcomposite'
+  'libxdamage'
+  'libxrandr'
+  'at-spi2-core'
+  'dbus'
+  'libayatana-appindicator'
+  'hicolor-icon-theme'
+  'desktop-file-utils'
+  'xdg-utils'
+)
+provides=('sable-next')
+conflicts=('sable-next' 'sable-next-nightly')
+options=('!strip' '!debug')
+install=${pkgname}.install
+
+_upstream_ver=${pkgver//_/-}
+
+source_x86_64=(
+  "sable-next-${_upstream_ver}.AppImage::${url}/releases/download/nightly-${_upstream_ver}/sable-next-${_upstream_ver}-linux-x86_64.AppImage"
+)
+sha256sums_x86_64=('SKIP')
+
+prepare() {
+  chmod +x "sable-next-${_upstream_ver}.AppImage"
+
+  "./sable-next-${_upstream_ver}.AppImage" --appimage-extract
+
+  sed -i \
+    's|^HERE=.*$|HERE=/opt/sable-next|' \
+    squashfs-root/AppRun
+}
+
+pkgver() {
+  local version
+
+  version=$(
+    sed -n 's/^X-AppImage-Version=//p' \
+      squashfs-root/sable-next.desktop |
+    head -n1
+  )
+
+  [[ -n $version ]] || {
+    printf 'Could not determine version\n' >&2
+    return 1
+  }
+
+  printf '%s\n' "${version//-/_}"
+}
+
+package() {
+  install -dm755 "$pkgdir/opt/sable-next"
+  cp -a squashfs-root/. "$pkgdir/opt/sable-next"
+
+  install -d "$pkgdir/usr/bin"
+  install -Dm755 \
+    "$pkgdir/opt/sable-next/AppRun" \
+    "$pkgdir/usr/bin/sable-next"
+
+  install -Dm644 \
+    "$pkgdir/opt/sable-next/sable-next.desktop" \
+    "$pkgdir/usr/share/applications/sable-next.desktop"
+
+  install -Dm644 \
+    "$pkgdir/opt/sable-next/sable-next.png" \
+    "$pkgdir/usr/share/icons/hicolor/256x256/apps/sable-next.png"
+
+  find "$pkgdir/opt/sable-next" -type d -exec chmod 0755 {} +
+  find "$pkgdir/opt/sable-next" -type f -exec chmod 0644 {} +
+  chmod 0755 "$pkgdir/opt/sable-next/AppRun" \
+    "$pkgdir/opt/sable-next/usr/bin/sable-next"
+}
