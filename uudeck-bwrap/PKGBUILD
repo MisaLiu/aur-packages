@@ -15,7 +15,7 @@ install=uudeck.install
 # Get latest version directly from upstream
 _uu_api="https://router.uu.163.com/api/plugin?type=steam-deck-plugin-x86_64"
 _uu_info=$(curl -fsSL --retry 3 --connect-timeout 10 -H "Accept: text/plain" "$_uu_api") \
-    || { echo "ERRPR: 无法与 UU 服务器交互：($_uu_api)" >&2; exit 1; }
+    || { echo "ERROR: 无法与 UU 服务器交互：($_uu_api)" >&2; exit 1; }
 _uu_url=${_uu_info%%,*}
 _uu_rest=${_uu_info#*,}; _uu_md5=${_uu_rest%%,*}
 pkgver=$(printf '%s' "$_uu_url" | sed -n 's#.*/v\([^/]*\)/.*#\1#p')
