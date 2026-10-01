@@ -1,9 +1,11 @@
 # Maintainer:  Misa Liu <misaliu@misaliu.top>
 # Contributor: liyp <my@liyp.cc>
 
+# Get latest version from: https://router.uu.163.com/api/plugin?type=steam-deck-plugin-x86_64
+
 pkgname=uudeck-bwrap
 pkgver=14.9.4
-pkgrel=1
+pkgrel=2
 pkgdesc="Simplified UU Accelerator for Steam Deck on Arch Linux, with some extra patches"
 arch=('x86_64')
 license=('custom')
@@ -12,28 +14,12 @@ depends=('systemd' 'bash' 'bubblewrap' 'curl' 'iproute2')
 makedepends=('curl' 'tar')
 conflicts=('uudeck')
 install=uudeck.install
-source=("uu.tar.gz::https://uurouter.gdl.netease.com/uuplugin/steam-deck-plugin-x86_64/v${pkgver}/uu.tar.gz"
+source=("uu-${pkgver}.tar.gz::https://uurouter.gdl.netease.com/uuplugin/steam-deck-plugin-x86_64/v${pkgver}/uu.tar.gz"
         "launch.sh"
         "uuplugin.service")
 sha256sums=('b791fcbf9d11c64783cee4e4235eeec05c3c8b12bc345f2a13e33f658f05a41d'
             '3cd77d7249cdc90a3ab6622ce18ef2bf2f24edb83ce50132f6717b96218b2529'
             '44347ed3034438f6f9f1df55450066709454281ed941631b4890de8a96f28e22')
-
-pkgver() {
-    local info url
-
-    info=$(
-        curl -fsSL \
-            -H 'Accept: text/plain' \
-            "https://router.uu.163.com/api/plugin?type=steam-deck-plugin-x86_64"
-    )
-
-    IFS=, read -r url _ <<<"$info"
-
-    printf '%s\n' \
-        "$(printf '%s' "$url" |
-            sed -n 's#.*/v\([^/]*\)/.*#\1#p')"
-}
 
 package() {
     install -Dm755 "$srcdir/launch.sh"         "$pkgdir/usr/lib/uudeck/launch.sh"
